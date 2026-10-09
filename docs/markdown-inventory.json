@@ -1,0 +1,90 @@
+{
+  "fileCount": 63,
+  "languages": {
+    "typescript": 59,
+    "plaintext": 3,
+    "mermaid": 6,
+    "html": 2,
+    "javascript": 3,
+    "lisp": 5,
+    "ocaml": 3,
+    "js": 3,
+    "tsx": 7,
+    "rust": 4,
+    "ts": 35,
+    "plain": 3,
+    "jsx": 2,
+    "(unlabelled)": 1,
+    "svelte": 2,
+    "diff": 1,
+    "json": 1,
+    "lua": 1,
+    "toml": 1,
+    "txt": 4,
+    "bash": 4
+  },
+  "tokenTypes": {
+    "paragraph_open": 1122,
+    "inline": 1389,
+    "text": 2198,
+    "paragraph_close": 1122,
+    "image": 8,
+    "hr": 11,
+    "heading_open": 267,
+    "heading_close": 267,
+    "bullet_list_open": 89,
+    "list_item_open": 424,
+    "link_open": 104,
+    "link_close": 104,
+    "list_item_close": 424,
+    "bullet_list_close": 89,
+    "code_inline": 460,
+    "fence": 150,
+    "strong_open": 179,
+    "strong_close": 179,
+    "blockquote_open": 29,
+    "softbreak": 7,
+    "blockquote_close": 29,
+    "ordered_list_open": 20,
+    "ordered_list_close": 20,
+    "em_open": 6,
+    "em_close": 6,
+    "math_inline": 83,
+    "hardbreak": 13,
+    "s_open": 1,
+    "s_close": 1,
+    "math_block": 13
+  },
+  "formulaCount": 51,
+  "diagramCount": 6,
+  "findings": [
+    {
+      "file": "posts/2023/monoid-algebraic-structure.md",
+      "line": 15,
+      "content": "\\\\exists e\\\\in S, \\\\forall a\\\\in S\\\\ \\\\ a \\\\bullet e = a\\\\ \\\\rm{and} \\\\ e\\\\bullet a=a\n",
+      "type": "double-backslash-before-command",
+      "note": "需要人工確認：重複反斜線可能使 LaTeX 指令變為換行加一般字母，不自動更動。"
+    },
+    {
+      "file": "posts/2023/monoid-algebraic-structure.md",
+      "line": 31,
+      "content": "a,b\\\\in M \\\\Longrightarrow a \\\\bullet b \\\\in M\n",
+      "type": "double-backslash-before-command",
+      "note": "需要人工確認：重複反斜線可能使 LaTeX 指令變為換行加一般字母，不自動更動。"
+    },
+    {
+      "file": "posts/2023/monoid-algebraic-structure.md",
+      "line": 35,
+      "content": "x,y,z\\\\in S\\\\Longrightarrow(x\\\\bullet y)\\\\bullet z = x\\\\bullet (y\\\\bullet z)\n",
+      "type": "double-backslash-before-command",
+      "note": "需要人工確認：重複反斜線可能使 LaTeX 指令變為換行加一般字母，不自動更動。"
+    },
+    {
+      "file": "posts/2023/monoid-algebraic-structure.md",
+      "line": 39,
+      "content": "\\\\exists e\\\\in M, \\\\forall a\\\\in M\\\\ \\\\ a \\\\bullet e = a\\\\ \\\\rm{and} \\\\ e\\\\bullet a=a\n",
+      "type": "double-backslash-before-command",
+      "note": "需要人工確認：重複反斜線可能使 LaTeX 指令變為換行加一般字母，不自動更動。"
+    }
+  ]
+}

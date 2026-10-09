@@ -1,0 +1,7 @@
+---
+layout: base.njk
+title: Notes
+permalink: /notes/index.html
+---
+<h1>{{ title }}</h1>
+{% set entries = collections.notes %}{% include "article-list.njk" %}

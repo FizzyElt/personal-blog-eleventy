@@ -1,0 +1,33 @@
+# 套件依賴
+node_modules/
+
+# Eleventy 與瀏覽器程式碼建置產物
+/_site/
+/.generated/
+
+# Cloudflare Wrangler 本機快取與狀態
+/.wrangler/
+
+# 本機環境變數與機密（允許提交不含機密的範本）
+.env
+.env.*
+!.env.example
+!.env.*.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+!.dev.vars.*.example
+
+# 工具快取、測試覆蓋率與日誌
+/.cache/
+/coverage/
+*.tsbuildinfo
+*.log
+
+# 作業系統與編輯器暫存檔
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~

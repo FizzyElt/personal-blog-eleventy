@@ -1,0 +1,9 @@
+<ul class="article-list">
+    {% for entry in entries %}
+    <li>
+        <h2><a href="{{ entry.url }}">{{ entry.data.title | escape }}</a></h2>
+        {% if entry.data.date %}<time datetime="{{ entry.date | dateISO }}">{{ entry.date | dateISO }}</time>{% endif %}
+        {% if entry.data.description %}<p>{{ entry.data.description | escape }}</p>{% endif %}
+    </li>
+    {% endfor %}
+</ul>

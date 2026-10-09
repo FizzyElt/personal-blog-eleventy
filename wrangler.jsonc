@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "personal-blog-eleventy",
+  "compatibility_date": "2026-10-09",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./_site",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "account_id": "5f3fd7e6a0eb3b23de0a10e050bec07f"
+}

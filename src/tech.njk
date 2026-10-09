@@ -1,0 +1,7 @@
+---
+layout: base.njk
+title: 技術筆記
+permalink: /tech/index.html
+---
+<h1>{{ title }}</h1>
+{% set entries = collections.tech %}{% include "article-list.njk" %}
