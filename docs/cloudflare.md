@@ -39,6 +39,10 @@ Repository：https://github.com/FizzyElt/personal-blog-eleventy
 
 Cloudflare 控制台中的 GitHub 授權與連接設定不由 `wrangler.jsonc` 管理。連接成功後，push 至 `main` 才會觸發自動部署；可在 Worker 的 Builds 查看對應 commit 的執行結果。首次務必確認建置與部署皆成功，之後才算完成整合。
 
+### 日常發布流程
+
+修改文章或網站後，將變更 commit 並 push 至 `main`。Cloudflare Workers Builds 收到 push 後會執行上面的建置及部署指令。發布時查看 Builds 中對應的 commit SHA，確認整個流程成功；僅看到 GitHub push 成功不代表網站已更新。
+
 本機手動部署仍可使用 `npm run deploy`。不要同時啟用第二套 GitHub Actions 部署，以免重複發布。
 
 ## 連結預覽
