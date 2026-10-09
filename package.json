@@ -17,7 +17,8 @@
     "predeploy": "node scripts/check-deployment.ts && npm run build && npm run check:sharing",
     "deploy": "wrangler deploy",
     "preview:cloudflare": "wrangler dev",
-    "check:sharing": "node scripts/check-sharing.ts"
+    "check:sharing": "node scripts/check-sharing.ts",
+    "build:ci": "node scripts/check-deployment.ts && npm run typecheck && npm run build && npm run check:markdown && npm run check:sharing"
   },
   "engines": {
     "node": ">=24"

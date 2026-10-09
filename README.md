@@ -82,4 +82,4 @@ npm run typecheck
 
 ### Cloudflare 與分享預覽
 
-已設定 Cloudflare Workers Static Assets 與共用分享封面。首次發布需要 Cloudflare 登入及正式網址；日後使用 `npm run deploy`。詳細設定見 [部署與預覽文件](docs/cloudflare.md)。
+已設定 Cloudflare Workers Static Assets 與共用分享封面。GitHub 自動部署採用 Workers Builds，建置指令為 `npm run build:ci`；需要先在 Cloudflare 控制台連接 repository 的 `main` 分支。本機仍可用 `npm run deploy` 手動發布。詳細設定見 [部署與預覽文件](docs/cloudflare.md)。
