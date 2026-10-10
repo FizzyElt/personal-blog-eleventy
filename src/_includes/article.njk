@@ -14,5 +14,5 @@ layout: base.njk
   {{ content | safe }}
 </article>
 {% if home %}<section>
-  <h2>最新內容</h2>{% set entries = collections.articles.slice(0, 10) %}{% include "article-list.njk" %}
+  <h2>最新內容</h2>{% set entries = collections.articles.slice(0, 5) %}{% include "article-list.njk" %}
 </section>{% endif %}

@@ -50,6 +50,10 @@
 
 body {
   margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 ::selection {
@@ -58,7 +62,8 @@ body {
 }
 
 main,
-nav {
+nav,
+.site-footer {
   width: min(100%, 54rem);
   margin-inline: auto;
   padding-inline: 2rem;
@@ -101,7 +106,49 @@ nav a:not(.site-brand)[aria-current="page"] {
 }
 
 main {
+  flex: 1;
   padding-block: 3rem 5rem;
+}
+
+.site-footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem 2rem;
+  border-top: 1px solid var(--lightgray);
+  padding-block: 1.5rem 2rem;
+  font-size: .85rem;
+  color: var(--muted);
+}
+
+.footer-name {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: .025em;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-links li {
+  margin: 0;
+}
+
+.footer-links a {
+  display: inline-block;
+  padding-block: .25rem;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
 }
 
 h1,
@@ -385,7 +432,8 @@ mark {
 @media (max-width: 40rem) {
 
   main,
-  nav {
+  nav,
+  .site-footer {
     padding-inline: 1.25rem;
   }
 

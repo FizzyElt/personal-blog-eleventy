@@ -3,5 +3,19 @@
   "description": "紀錄程式、生活與心靈成長，分享 Functional Programming 的思考與實踐。",
   "url": "https://personal-blog-eleventy.fizzyelt8786.workers.dev",
   "image": "/assets/social-cover.png",
-  "imageAlt": "FizzyElt：程式、生活與心靈成長"
+  "imageAlt": "FizzyElt：程式、生活與心靈成長",
+  "footerLinks": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/fizzyelt"
+    },
+    {
+      "label": "Twitter",
+      "url": "https://twitter.com/fizzyelt"
+    },
+    {
+      "label": "Mastodon",
+      "url": "https://g0v.social/@fizzyelt"
+    }
+  ]
 }

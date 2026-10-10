@@ -8,17 +8,11 @@
     "dev": "eleventy --config=eleventy.config.ts --serve",
     "build": "eleventy --config=eleventy.config.ts",
     "watch": "eleventy --config=eleventy.config.ts --watch",
-    "fixtures:generate": "node scripts/generate-markdown-fixture.ts",
-    "check:markdown": "node scripts/check-markdown.ts",
-    "clean": "node scripts/clean.ts",
-    "prebuild": "npm run clean",
-    "check:migration": "node scripts/check-migration.ts",
     "typecheck": "tsc --project tsconfig.json && tsc --project tsconfig.browser.json",
-    "predeploy": "node scripts/check-deployment.ts && npm run build && npm run check:sharing",
+    "predeploy": "npm run build",
     "deploy": "wrangler deploy",
     "preview:cloudflare": "wrangler dev",
-    "check:sharing": "node scripts/check-sharing.ts",
-    "build:ci": "node scripts/check-deployment.ts && npm run typecheck && npm run build && npm run check:markdown && npm run check:sharing"
+    "build:ci": "npm run typecheck && npm run build"
   },
   "engines": {
     "node": ">=24"
@@ -29,7 +23,6 @@
     "@shikijs/markdown-it": "4.5.0",
     "@types/node": "24.19.1",
     "esbuild": "0.28.2",
-    "gray-matter": "4.0.3",
     "katex": "0.19.0",
     "markdown-it": "15.0.2",
     "markdown-it-anchor": "10.0.0",

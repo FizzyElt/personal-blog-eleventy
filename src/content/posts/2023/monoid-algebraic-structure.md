@@ -12,15 +12,15 @@ tags: ["Typescript", "Functional-Programming", "fp-ts", "algebra"]
 
 假設我們有個集合 $S$，而一個 **identity element** 必須滿足以下條件：
 
-$$\\exists e\\in S, \\forall a\\in S\\ \\ a \\bullet e = a\\ \\rm{and} \\ e\\bullet a=a$$
+$$\exists e\in S, \forall a\in S\ \ a \bullet e = a\ \rm{and} \ e\bullet a=a$$
 
 白話文解釋就是，在 $S$ 中存在一個 $e$，使得對於所有 $S$ 中的每個元素 $a$，等式 $a \bullet e = a$ 與 $e\bullet a=a$ 兩者成立。
 
 實際案例就是相加跟相乘，相加的 identity element 是 $0$，相乘則是 $1$。
 
-$$0 + 47 = 47\\ and\\ 47 + 0 =47$$
+$$0 + 47 = 47\ and\ 47 + 0 =47$$
 
-$$1 * 34 = 34\\ and\\ 34 * 1 =47$$
+$$1 * 34 = 34\ and\ 34 * 1 =47$$
 
 ### Monoid
 
@@ -28,15 +28,15 @@ $$1 * 34 = 34\\ and\\ 34 * 1 =47$$
 
 - Magma：嘗試定義一個集合 $M$ 的**二元運算**，$(M,\bullet)$
 
-$$a,b\\in M \\Longrightarrow a \\bullet b \\in M$$
+$$a,b\in M \Longrightarrow a \bullet b \in M$$
 
 - Semigroup：以 Magma 為基礎添加一條結合律的規則，$(S,\bullet)$
 
-$$x,y,z\\in S\\Longrightarrow(x\\bullet y)\\bullet z = x\\bullet (y\\bullet z)$$
+$$x,y,z\in S\Longrightarrow(x\bullet y)\bullet z = x\bullet (y\bullet z)$$
 
 - Monoid：從 Semigroup 集合 $S$ 中尋找是否存在 identity element，$(M,\bullet)$
 
-$$\\exists e\\in M, \\forall a\\in M\\ \\ a \\bullet e = a\\ \\rm{and} \\ e\\bullet a=a$$
+$$\exists e\in M, \forall a\in M\ \ a \bullet e = a\ \rm{and} \ e\bullet a=a$$
 
 [fp-ts interface](https://github.com/gcanti/fp-ts/blob/master/src/Monoid.ts#L50) 定義如下
 
