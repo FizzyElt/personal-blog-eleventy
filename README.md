@@ -23,7 +23,7 @@ npm run build
 ## 文件
 
 - [寫作指南](docs/content.md)：文章分類、前置資料、草稿、網址、圖片與分享封面。
-- [開發指南](docs/development.md)：專案結構、TypeScript、瀏覽器程式、Markdown 渲染與主題。
+- [開發指南](docs/development.md)：專案結構、集中設定、TypeScript、Markdown 渲染、主題與自動分享預覽圖。
 - [部署指南](docs/cloudflare.md)：Cloudflare 建置設定、正式網址、本機預覽與發布。
 
 ## 參考

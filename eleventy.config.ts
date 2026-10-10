@@ -1,4 +1,9 @@
 import type UserConfig from "@11ty/eleventy/UserConfig";
+import type { EleventyPluginOgImageOptions } from "eleventy-plugin-og-image";
+
+import EleventyPluginOgImage from "eleventy-plugin-og-image";
+import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 
 import type { CollectionApi, CollectionItem, ContentData } from "./types/content.ts";
 
@@ -6,9 +11,59 @@ import { createMarkdown } from "./lib/markdown.ts";
 import { buildClient } from "./scripts/build-client.ts";
 
 export default async function config(eleventyConfig: UserConfig) {
-    eleventyConfig.addFilter("absoluteUrl", (value: string, base: string) =>
-        new URL(value, process.env.SITE_URL || base).href,
+    // 分享預覽圖：字型、產圖外掛與圖片快取。
+    const font = await readFile(new URL("./fonts/NotoSansCJKtc-Regular.otf", import.meta.url));
+    const fontHash = createHash("sha256").update(font).digest("hex");
+    eleventyConfig.addPlugin(EleventyPluginOgImage, {
+        hashLength: 16,
+        previewMode: false,
+        satoriOptions: {
+            width: 1200,
+            height: 630,
+            fonts: [
+                {
+                    name: "Noto Sans TC",
+                    // ArrayBuffer avoids recursively serializing every font byte in the plugin's hash.
+                    data: font.buffer.slice(font.byteOffset, font.byteOffset + font.byteLength),
+                    weight: 400,
+                    style: "normal",
+                },
+            ],
+        },
+        outputFileSlug: async (image) =>
+            createHash("sha256")
+                .update(await image.hash())
+                .update(fontHash)
+                .digest("hex")
+                .slice(0, 16),
+        shortcodeOutput: async (image) => image.outputUrl(),
+    } satisfies EleventyPluginOgImageOptions);
+    eleventyConfig.addWatchTarget("fonts/**");
+    eleventyConfig.addWatchTarget("src/_includes/*.og.njk");
+
+    // 模板篩選器：絕對網址、日期與標籤網址。
+    eleventyConfig.addFilter(
+        "absoluteUrl",
+        (value: string, base: string) => new URL(value, process.env.SITE_URL || base).href,
     );
+    eleventyConfig.addFilter("dateISO", (value: Date | string) =>
+        new Date(value).toISOString().slice(0, 10),
+    );
+    eleventyConfig.addFilter(
+        "tagUrl",
+        (tag: string) =>
+            "/tags/" +
+            tag
+                .normalize("NFC")
+                .replace(/\s+/g, "_")
+                .replace(
+                    /[^\p{L}\p{N}_.-]/gu,
+                    (character) => "~" + character.codePointAt(0)!.toString(16),
+                ) +
+            "/",
+    );
+
+    // 內容：草稿排除、文章排序與分類／標籤集合。
     eleventyConfig.ignores.add("src/content/templates/**");
     eleventyConfig.addPreprocessor("drafts", "md", (data: ContentData) => {
         if (data.draft === true) {
@@ -28,22 +83,6 @@ export default async function config(eleventyConfig: UserConfig) {
                 .sort((a, b) => a.inputPath.localeCompare(b.inputPath)),
         ];
     }
-    eleventyConfig.addFilter("dateISO", (value: Date | string) =>
-        new Date(value).toISOString().slice(0, 10),
-    );
-    eleventyConfig.addFilter(
-        "tagUrl",
-        (tag: string) =>
-            "/tags/" +
-            tag
-                .normalize("NFC")
-                .replace(/\s+/g, "_")
-                .replace(
-                    /[^\p{L}\p{N}_.-]/gu,
-                    (character) => "~" + character.codePointAt(0)!.toString(16),
-                ) +
-            "/",
-    );
     for (const section of ["articles", "posts", "notes", "tech"]) {
         eleventyConfig.addCollection(section, (collection: CollectionApi) =>
             publicArticles(collection).filter(
@@ -67,12 +106,16 @@ export default async function config(eleventyConfig: UserConfig) {
                 return { tag, entries };
             });
     });
+
+    // 資源：瀏覽器程式編譯、檔案監看與靜態檔案複製。
     eleventyConfig.addWatchTarget("src/client/**/*.ts");
     eleventyConfig.addWatchTarget("lib/**/*.ts");
     eleventyConfig.addWatchTarget("scripts/build-client.ts");
     eleventyConfig.on("eleventy.before", buildClient);
-    eleventyConfig.addPassthroughCopy({ ".generated/mermaid.js": "assets/mermaid.js", ".generated/theme.js": "assets/theme.js" });
-    eleventyConfig.setLibrary("md", await createMarkdown());
+    eleventyConfig.addPassthroughCopy({
+        ".generated/mermaid.js": "assets/mermaid.js",
+        ".generated/theme.js": "assets/theme.js",
+    });
     eleventyConfig.addPassthroughCopy("src/assets");
     eleventyConfig.addPassthroughCopy({
         "node_modules/katex/dist/katex.min.css": "assets/vendor/katex/katex.min.css",
@@ -82,6 +125,9 @@ export default async function config(eleventyConfig: UserConfig) {
         "node_modules/mermaid/dist/chunks/mermaid.esm.min/*.mjs":
             "assets/vendor/mermaid/chunks/mermaid.esm.min",
     });
+
+    // Markdown 渲染與模板引擎。
+    eleventyConfig.setLibrary("md", await createMarkdown());
 
     return {
         dir: { input: "src", includes: "_includes", output: "_site" },

@@ -13,14 +13,14 @@
 
 Cloudflare Workers Builds 使用以下設定；GitHub 授權與分支連接由 Cloudflare 控制台管理，不在 `wrangler.jsonc` 中。
 
-| 欄位 | 值 |
-| --- | --- |
-| Production branch | `main` |
-| Root directory | `/` |
-| Build command | `npm run build:ci` |
-| Deploy command | `npx wrangler deploy` |
-| Build variable `NODE_VERSION` | `24` |
-| Build variable `SITE_URL` | `https://personal-blog-eleventy.fizzyelt8786.workers.dev` |
+| 欄位                          | 值                                                        |
+| ----------------------------- | --------------------------------------------------------- |
+| Production branch             | `main`                                                    |
+| Root directory                | `/`                                                       |
+| Build command                 | `npm run build:ci`                                        |
+| Deploy command                | `npx wrangler deploy`                                     |
+| Build variable `NODE_VERSION` | `24`                                                      |
+| Build variable `SITE_URL`     | `https://personal-blog-eleventy.fizzyelt8786.workers.dev` |
 
 修改完成後 commit 並 push 至 `main`。`build:ci` 依序執行型別檢查與建置；發布後，在 Cloudflare Builds 確認對應 commit SHA 的建置及部署結果。
 
@@ -41,7 +41,7 @@ npm run deploy
 
 `predeploy` 會先執行建置。部署前可執行 `npx wrangler deploy --dry-run` 檢查設定而不發布。多帳戶時，以 `CLOUDFLARE_ACCOUNT_ID` 指定帳戶；登入憑證不加入版控。
 
-本機建置不會自動清空 `_site/`；刪除文章、更改網址或草稿狀態後，先刪除 `_site/` 再重新建置與發布。
+刪除文章、更改網址或草稿狀態後，依[建置產物說明](development.md#建置產物)清理舊輸出再發布。文章預覽圖會隨 `_site/` 一起部署，不需另外設定圖片服務。
 
 ## 正式網址與分享資訊
 
