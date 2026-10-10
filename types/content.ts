@@ -1,5 +1,6 @@
 export interface ContentData {
     title?: string;
+    description?: string;
     date?: Date | string;
     draft?: boolean;
     tags?: string[];

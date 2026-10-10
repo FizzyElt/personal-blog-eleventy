@@ -1,0 +1,18 @@
+export const data = {
+    layout: "base.11ty.tsx",
+    title: "找不到頁面",
+    permalink: "/404.html",
+    eleventyExcludeFromCollections: true,
+};
+
+export default function () {
+    return (
+        <>
+            <h1>找不到頁面</h1>
+            <p>這個網址不存在，或文章已經搬移。</p>
+            <p>
+                <a href="/">回首頁</a> · <a href="/posts/">瀏覽文章</a>
+            </p>
+        </>
+    );
+}

@@ -1,9 +1,12 @@
 import type UserConfig from "@11ty/eleventy/UserConfig";
 import type { EleventyPluginOgImageOptions } from "eleventy-plugin-og-image";
+import type { ReactNode } from "react";
 
+import "tsx/esm";
 import EleventyPluginOgImage from "eleventy-plugin-og-image";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
+import { renderToStaticMarkup } from "react-dom/server";
 
 import type { CollectionApi, CollectionItem, ContentData } from "./types/content.ts";
 
@@ -11,6 +14,19 @@ import { createMarkdown } from "./lib/markdown.ts";
 import { buildClient } from "./scripts/build-client.ts";
 
 export default async function config(eleventyConfig: UserConfig) {
+    // TSX 模板：只在建置時渲染為 HTML。
+    eleventyConfig.addExtension("11ty.tsx", {
+        key: "11ty.js",
+        compile() {
+            return async function (
+                this: { defaultRenderer(data: unknown): Promise<ReactNode> },
+                data: unknown,
+            ) {
+                const markup = renderToStaticMarkup(await this.defaultRenderer(data));
+                return markup.startsWith("<html") ? `<!doctype html>${markup}` : markup;
+            };
+        },
+    });
     // 分享預覽圖：字型、產圖外掛與圖片快取。
     const font = await readFile(new URL("./fonts/NotoSansCJKtc-Regular.otf", import.meta.url));
     const fontHash = createHash("sha256").update(font).digest("hex");
@@ -39,7 +55,7 @@ export default async function config(eleventyConfig: UserConfig) {
         shortcodeOutput: async (image) => image.outputUrl(),
     } satisfies EleventyPluginOgImageOptions);
     eleventyConfig.addWatchTarget("fonts/**");
-    eleventyConfig.addWatchTarget("src/_includes/*.og.njk");
+    eleventyConfig.addWatchTarget("src/_includes/**/*.tsx");
 
     // 模板篩選器：絕對網址、日期與標籤網址。
     eleventyConfig.addFilter(
@@ -131,8 +147,8 @@ export default async function config(eleventyConfig: UserConfig) {
 
     return {
         dir: { input: "src", includes: "_includes", output: "_site" },
-        templateFormats: ["md", "njk", "html"],
+        templateFormats: ["md", "11ty.tsx", "html"],
         markdownTemplateEngine: false,
-        htmlTemplateEngine: "njk",
+        htmlTemplateEngine: false,
     };
 }

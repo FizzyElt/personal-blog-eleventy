@@ -1,9 +1,0 @@
----
-layout: base.njk
-title: Tags
-permalink: /tags/index.html
----
-<h1>Tags</h1>
-<ul>{% for group in collections.tagGroups %}<li><a
-            href="{{ group.tag | tagUrl }}">{{ group.tag | escape }}</a>（{{ group.entries.length }}）</li>{% endfor %}
-</ul>

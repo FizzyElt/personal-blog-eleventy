@@ -1,6 +1,6 @@
 # personal-blog-eleventy
 
-FizzyElt 的個人部落格，使用 Eleventy、Markdown 與 Nunjucks（模板）建置，部署至 Cloudflare Workers Static Assets（靜態資源）。
+FizzyElt 的個人部落格，使用 Eleventy、Markdown 與 TSX（模板）建置，部署至 Cloudflare Workers Static Assets（靜態資源）。
 
 ## 快速開始
 

@@ -7,7 +7,7 @@
 | `eleventy.config.ts`      | 集中管理 Eleventy 設定，依功能區塊分類   |
 | `src/content/`            | 首頁、文章與寫作範本                     |
 | `src/_data/site.json`     | 網站名稱、摘要、網址、共用封面與頁尾連結 |
-| `src/_includes/`          | Nunjucks 共用版型與分享圖片模板          |
+| `src/_includes/`          | TSX 共用版型、元件與分享圖片模板         |
 | `src/assets/`             | CSS、圖片及直接複製的靜態資源            |
 | `src/client/`             | 主題切換與 Mermaid 瀏覽器程式            |
 | `lib/markdown.ts`         | Markdown 外掛與程式碼高亮整合            |
@@ -17,15 +17,16 @@
 
 ## Eleventy 設定
 
-設定集中在 `eleventy.config.ts`，依序分成五個區塊：
+設定集中在 `eleventy.config.ts`，依序分成六個區塊：
 
-1. 分享預覽圖：外掛、字型、圖片雜湊與監看設定。
-2. 模板篩選器：`absoluteUrl`、`dateISO`、`tagUrl`。
-3. 內容：寫作範本與草稿排除、文章排序、分類及標籤集合。
-4. 資源：瀏覽器程式建置、檔案監看與靜態資源複製。
-5. Markdown 與模板引擎：渲染器、輸入／輸出目錄與支援格式。
+1. TSX 模板：註冊載入器與靜態 HTML 渲染。
+2. 分享預覽圖：外掛、字型、圖片雜湊與監看設定。
+3. 模板篩選器：`absoluteUrl`、`dateISO`、`tagUrl`。
+4. 內容：寫作範本與草稿排除、文章排序、分類及標籤集合。
+5. 資源：瀏覽器程式建置、檔案監看與靜態資源複製。
+6. Markdown 與模板引擎：渲染器、輸入／輸出目錄與支援格式。
 
-首頁「最新內容」在 `src/_includes/article.njk` 取前五筆公開內容；分類與標籤頁使用完整集合。
+首頁「最新內容」在 `src/_includes/article.11ty.tsx` 取前五筆公開內容；分類與標籤頁使用完整集合。
 
 ## 指令與 TypeScript
 
@@ -37,11 +38,23 @@
 | `npm run typecheck` | 分別檢查 Node.js 與瀏覽器程式 |
 | `npm run build:ci`  | 型別檢查後建置                |
 
-Node.js 24 以 Type Stripping（型別移除）執行設定檔與腳本，本地 import 使用 `.ts` 副檔名。執行與建置不會代替型別檢查。
+Node.js 24 以 Type Stripping（型別移除）啟動設定檔；設定中載入 `tsx/esm`，讓 Eleventy 能執行 TSX 模板。本地 import 保留 `.ts` 或 `.tsx` 副檔名。執行與建置不會代替型別檢查。
 
-`tsconfig.json` 使用 NodeNext，`tsconfig.browser.json` 使用 DOM 型別與 Bundler 模組解析；兩者皆啟用 `strict`、`noEmit` 與 `erasableSyntaxOnly`。`types/content.ts` 只提供編譯期型別，不驗證文章的 YAML 資料。
+`tsconfig.json` 使用 NodeNext，`tsconfig.browser.json` 使用 DOM 型別與 Bundler 模組解析；兩者皆啟用 `strict`、`noEmit` 與 `erasableSyntaxOnly`。`types/content.ts` 與 `types/templates.ts` 只提供編譯期型別，不驗證文章的 YAML 資料。
 
 Node.js 設定的 `allowJs` 與 `maxNodeModuleJsDepth: 1` 用來讀取 Eleventy 的 JavaScript 型別資訊，`checkJs: false` 避免檢查上游實作。
+
+## TSX 模板
+
+頁面與版型使用 `.11ty.tsx`，透過 `export const data` 定義標題、版型、網址或分頁資料，預設匯出函式回傳 JSX。共用元件使用一般 `.tsx`，放在 `src/_includes/`，以 import 重用。
+
+`base.11ty.tsx` 組合導覽、分享中繼資料與頁尾；`article.11ty.tsx` 組合文章標頭與 Markdown 內容。Eleventy 的篩選器與短碼可在模板函式中透過 `this` 呼叫，因此需要它們的模板使用一般函式，並以 `TemplateHelpers` 標註 `this` 型別。
+
+React 的 `renderToStaticMarkup` 在建置時輸出 HTML，完整文件補上 doctype；React 不會被打包到瀏覽器，也沒有 hydration（啟用互動）。JSX 會自動跳脫文字與屬性。只有已渲染的文章內容、版型內容使用 `dangerouslySetInnerHTML`，不要將未經處理的外部輸入直接放進這個邊界。
+
+修改 TSX 模板或共用元件會觸發重新建置。Markdown 文章與 YAML front matter（檔頭資料）維持原格式，版型名稱使用 `article.11ty.tsx`。
+
+寫法參考 [Eleventy JSX](https://www.11ty.dev/docs/languages/jsx/) 與 [TypeScript](https://www.11ty.dev/docs/languages/typescript/)。
 
 ## 建置產物
 
@@ -77,7 +90,7 @@ Eleventy 關閉 Markdown 的 Liquid 預處理，使 `{{ title }}`、`{% raw %}` 
 
 主題變更會發出 `themechange` 事件，Mermaid 依目前配色重新渲染，Shiki 則由樣式切換雙主題。
 
-頁尾位於 `src/_includes/footer.njk`。編輯 `src/_data/site.json` 的 `footerLinks` 陣列即可新增、移除或排序連結：
+頁尾位於 `src/_includes/footer.tsx`。編輯 `src/_data/site.json` 的 `footerLinks` 陣列即可新增、移除或排序連結：
 
 ```json
 { "label": "GitHub", "url": "https://github.com/fizzyelt" }
@@ -92,12 +105,12 @@ Eleventy 關閉 Markdown 的 Liquid 預處理，使 `{{ title }}`、`{% raw %}` 
 | 項目                 | 位置或設定                                                                     |
 | -------------------- | ------------------------------------------------------------------------------ |
 | 外掛、字型與快取設定 | `eleventy.config.ts` 的分享預覽圖區塊                                          |
-| 卡片版型             | `src/_includes/social-card.og.njk`                                             |
-| 分享中繼資料         | `src/_includes/base.njk`                                                       |
+| 卡片版型             | `src/_includes/social-card.og.11ty.tsx`                                        |
+| 分享中繼資料         | `src/_includes/base.11ty.tsx`                                                  |
 | 圖片輸出             | `_site/og-images/`，1200×630 PNG                                               |
 | 字型                 | `fonts/NotoSansCJKtc-Regular.otf`，來源及授權見 [字型說明](../fonts/README.md) |
 
-`base.njk` 透過 `ogImage` 短碼取得圖片路徑，再以 `absoluteUrl` 轉成絕對網址，同時提供給 `og:image` 與 `twitter:image`。
+`base.11ty.tsx` 透過 `ogImage` 短碼取得圖片路徑，再以 `absoluteUrl` 轉成絕對網址，同時提供給 `og:image` 與 `twitter:image`。
 
 執行 `npm run dev` 後，檢視文章 HTML 的 `og:image`，取出 `/og-images/圖片雜湊.png` 路徑並在本機伺服器開啟。額外的 HTML/SVG 預覽頁已關閉，只輸出最終 PNG。
 
