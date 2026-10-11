@@ -38,6 +38,7 @@ export default async function (this: TemplateHelpers, data: TemplateData) {
                 <title>{title}</title>
                 <meta name="description" content={metaDescription} />
                 <link rel="canonical" href={url} />
+                <link rel="icon" type="image/png" href="/assets/favicon.png" />
                 <meta property="og:site_name" content={site.name} />
                 <meta property="og:locale" content="zh_TW" />
                 <meta property="og:type" content={isArticle ? "article" : "website"} />
